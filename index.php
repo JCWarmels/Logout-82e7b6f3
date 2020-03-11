@@ -1,106 +1,111 @@
 <?php
 function showingIndex() 
 {
-if (!isset($_COOKIE['loggedInUser'])) {
-    throw new Exception("U bent niet ingelogd, u wordt nu doorgestuurd naar de login pagina.");
-}
-$dsn = "mysql:host=localhost;dbname=netland";
-$user = "root";
-$passwd = "";
-
-$pdo = new PDO($dsn, $user, $passwd);
-$result_series = "";
-$result_films = "";
-if(isset($_GET['series_title'])) {
-    if($_GET['series_title'] == 'ASC') {
-        $result_series = $pdo->query("SELECT id, title, rating FROM media WHERE media_type = 'serie' ORDER BY title ASC");
-    } else {
-        $result_series = $pdo->query("SELECT id, title, rating FROM media WHERE media_type = 'serie' ORDER BY title DESC");
+    if (!isset($_COOKIE['loggedInUser'])) {
+        throw new Exception("U bent niet ingelogd, u wordt nu doorgestuurd naar de login pagina.");
     }
-}
-if(isset($_GET['series_rating'])) {
-    if($_GET['series_rating'] == 'ASC') {
-        $result_series = $pdo->query("SELECT id, title, rating FROM media WHERE media_type = 'serie' ORDER BY rating ASC");
-    } else {
-        $result_series = $pdo->query("SELECT id, title, rating FROM media WHERE media_type = 'serie' ORDER BY rating DESC");
+    $dsn = "mysql:host=localhost;dbname=netland";
+    $user = "root";
+    $passwd = "";
+
+    $pdo = new PDO($dsn, $user, $passwd);
+    $result_series = "";
+    $result_films = "";
+    if(isset($_GET['series_title'])) {
+        if($_GET['series_title'] == 'ASC') {
+            $result_series = $pdo->query("SELECT id, title, rating FROM media WHERE media_type = 'serie' ORDER BY title ASC");
+        } else {
+            $result_series = $pdo->query("SELECT id, title, rating FROM media WHERE media_type = 'serie' ORDER BY title DESC");
+        }
     }
-}
-if(isset($_GET['films_title'])) {
-    if($_GET['films_title'] == 'ASC') {
-        $result_films = $pdo->query("SELECT id, title, duration FROM media WHERE media_type = 'movie' ORDER BY title ASC");
-    } else {
-        $result_films = $pdo->query("SELECT id, title, duration FROM media WHERE media_type = 'movie' ORDER BY title DESC");
+    if(isset($_GET['series_rating'])) {
+        if($_GET['series_rating'] == 'ASC') {
+            $result_series = $pdo->query("SELECT id, title, rating FROM media WHERE media_type = 'serie' ORDER BY rating ASC");
+        } else {
+            $result_series = $pdo->query("SELECT id, title, rating FROM media WHERE media_type = 'serie' ORDER BY rating DESC");
+        }
     }
-}
-if(isset($_GET['films_duration'])) {
-    if($_GET['films_duration'] == 'ASC') {
-        $result_films = $pdo->query("SELECT id, title, duration FROM media WHERE media_type = 'movie' ORDER BY duration ASC");
-    } else {
-        $result_films = $pdo->query("SELECT id, title, duration FROM media WHERE media_type = 'movie' ORDER BY duration DESC");
+    if(isset($_GET['films_title'])) {
+        if($_GET['films_title'] == 'ASC') {
+            $result_films = $pdo->query("SELECT id, title, duration FROM media WHERE media_type = 'movie' ORDER BY title ASC");
+        } else {
+            $result_films = $pdo->query("SELECT id, title, duration FROM media WHERE media_type = 'movie' ORDER BY title DESC");
+        }
     }
-}
-if($result_series == "") {
-    $result_series = $pdo->query("SELECT id, title, rating FROM media WHERE media_type = 'serie'");
-}
-if($result_films == "") {
-    $result_films = $pdo->query("SELECT id, title, duration FROM media WHERE media_type = 'movie'");
-}
-$remember_sort = "";
-$remember_sort2 = "";
-if(array_key_exists('series_title', $_GET)) {
-    $remember_sort = "&series_title=".$_GET['series_title'];
-}
-if(array_key_exists('series_rating', $_GET)) {
-    $remember_sort = "&series_rating=".$_GET['series_rating'];
-}
-if(array_key_exists('films_title', $_GET)) {
-    $remember_sort2 = "&films_title=".$_GET['films_title'];
-}
-if(array_key_exists('films_duration', $_GET)) {
-     $remember_sort2 = "&films_duration=".$_GET['films_duration'];
-}
+    if(isset($_GET['films_duration'])) {
+        if($_GET['films_duration'] == 'ASC') {
+            $result_films = $pdo->query("SELECT id, title, duration FROM media WHERE media_type = 'movie' ORDER BY duration ASC");
+        } else {
+            $result_films = $pdo->query("SELECT id, title, duration FROM media WHERE media_type = 'movie' ORDER BY duration DESC");
+        }
+    }
+    if($result_series == "") {
+        $result_series = $pdo->query("SELECT id, title, rating FROM media WHERE media_type = 'serie'");
+    }
+    if($result_films == "") {
+        $result_films = $pdo->query("SELECT id, title, duration FROM media WHERE media_type = 'movie'");
+    }
+    $remember_sort = "";
+    $remember_sort2 = "";
+    if(array_key_exists('series_title', $_GET)) {
+        $remember_sort = "&series_title=".$_GET['series_title'];
+    }
+    if(array_key_exists('series_rating', $_GET)) {
+        $remember_sort = "&series_rating=".$_GET['series_rating'];
+    }
+    if(array_key_exists('films_title', $_GET)) {
+        $remember_sort2 = "&films_title=".$_GET['films_title'];
+    }
+    if(array_key_exists('films_duration', $_GET)) {
+         $remember_sort2 = "&films_duration=".$_GET['films_duration'];
+    }
 
-$series_title = "index.php?series_title=";
-if(isset($_GET['series_title'])) {
-    $series_title .= $_GET['series_title'] === 'DESC' ? 'ASC' : 'DESC';
-} else {
-    $series_title .= 'DESC';
-} 
-$series_title .= $remember_sort2;
+    $series_title = "index.php?series_title=";
+    if(isset($_GET['series_title'])) {
+        $series_title .= $_GET['series_title'] === 'DESC' ? 'ASC' : 'DESC';
+    } else {
+        $series_title .= 'DESC';
+    } 
+    $series_title .= $remember_sort2;
 
-$series_rating = "index.php?series_rating=";
-if(isset($_GET['series_rating'])) {
-    $series_rating .= $_GET['series_rating'] === 'DESC' ? 'ASC' : 'DESC';
-} else {
-    $series_rating .= 'DESC';
-} 
-$series_rating .= $remember_sort2;
+    $series_rating = "index.php?series_rating=";
+    if(isset($_GET['series_rating'])) {
+        $series_rating .= $_GET['series_rating'] === 'DESC' ? 'ASC' : 'DESC';
+    } else {
+        $series_rating .= 'DESC';
+    } 
+    $series_rating .= $remember_sort2;
 
-$films_title = "index.php?films_title=";
-if(isset($_GET['films_title'])) {
-    $films_title .= $_GET['films_title'] === 'DESC' ? 'ASC' : 'DESC';
-} else {
-    $films_title .= 'DESC';
-} 
-$films_title .= $remember_sort;
+    $films_title = "index.php?films_title=";
+    if(isset($_GET['films_title'])) {
+        $films_title .= $_GET['films_title'] === 'DESC' ? 'ASC' : 'DESC';
+    } else {
+        $films_title .= 'DESC';
+    } 
+    $films_title .= $remember_sort;
 
-$films_duration = "index.php?films_duration=";
-if(isset($_GET['films_duration'])) {
-    $films_duration .= $_GET['films_duration'] === 'DESC' ? 'ASC' : 'DESC';
-} else {
-    $films_duration .= 'DESC';
-} 
-$films_duration .= $remember_sort;
-?>
+    $films_duration = "index.php?films_duration=";
+    if(isset($_GET['films_duration'])) {
+        $films_duration .= $_GET['films_duration'] === 'DESC' ? 'ASC' : 'DESC';
+    } else {
+        $films_duration .= 'DESC';
+    } 
+    $films_duration .= $remember_sort;
+    ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <link rel="stylesheet" type="text/css" href="CSS/theme.css">
 </head>
 <body>
     <main>
-        <h1>Welkom op het netland beheerderspaneel</h1>
+        <div id="saveButton">
+            <h1>Welkom op het netland beheerderspaneel</h1>
+            <form action="/PHP/login.php" method="post">
+                <input type="submit" name="logout" value="logout">
+            </form>
+        </div>
         <h2 >Series</h2>
         <table>
         <tr><th style='width:150px'><a href=<?php echo $series_title; ?>>Title</a></th>
@@ -134,7 +139,7 @@ $films_duration .= $remember_sort;
     </main>
 </body>
 </html>
-<?php
+    <?php
 }
 try {
     showingIndex();

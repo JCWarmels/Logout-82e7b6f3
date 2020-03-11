@@ -1,6 +1,7 @@
 <?php
 function loggingIn() 
 {
+    setcookie('loggedInUser', "", time() - 300);
     $dsn = "mysql:host=localhost;dbname=netland";
     $user = "root";
     $passwd = "";
