@@ -10,8 +10,8 @@ function overlord()
     $dsn = "mysql:host=localhost;dbname=netland";
     $user = "root";
     $passwd = "";
+    $pdo = new PDO($dsn, $user, $passwd);
     if (array_key_exists('id', $_GET)) {
-        $pdo = new PDO($dsn, $user, $passwd);
         $request = $pdo->prepare("SELECT * FROM media WHERE id=?");
         $request->execute([$_GET['id']]);
         $to_show = $request->fetch(PDO::FETCH_ASSOC);
@@ -50,15 +50,20 @@ function overlord()
         <!DOCTYPE html>
         <html>
         <head>
-            <title></title>
+            <link rel="stylesheet" type="text/css" href="CSS/theme.css">
         </head>
         <body>
             <main>
-                <h1>Welkom op het netland beheerderspaneel</h1>
+                <div id="saveButton">
+                    <h1>Welkom op het netland beheerderspaneel</h1>
+                    <form action="/PHP/logout.php" method="post">
+                        <input type="submit" name="submit" value="logout">
+                    </form>
+                </div>
                 <h2>Hier vindt u all data over<?php echo PHP_EOL . $to_show['title']; ?>:</h2>
                 <div style="display:flex; flex-direction:row; width:150px; justify-content: space-around;">
                     <h3><?php echo $to_show['title']?></h3>
-                    <h4><?php echo $showable_first?></h4>
+                    <h4 id="fx"><?php echo $showable_first?></h4>
                 </div>
                 <div style="display:flex; flex-direction:row; width:150px; justify-content: space-around;">
                     <h4><?php echo $showable_second?></h4>
@@ -73,7 +78,7 @@ function overlord()
                     <?php echo $showable_fifth?>
                 </div>
                 <div>
-                    <button onclick="location.href='<?php echo $link_shift?>'">Edit, Only admins ok? I trust you!</button>
+                    <button class="bf" onclick="location.href='<?php echo $link_shift?>'">Edit, Only admins ok? I trust you!</button>
                 </div>
             </main>
         </body>
@@ -95,8 +100,8 @@ function overlord()
             $line_six = '<h2>Language</h2><input type="text" name="language" value="' . $to_show['language'] . '">';
             if(isset($_POST['title'])) {
                 $awards = boolval($_POST['has_won_awards']);
-                $updating_series = $pdo->prepare("UPDATE media SET title=?, rating=?, description=?, awards=?, seasons=?, country=?, language=? WHERE id=?");
-                $updating_series->execute(
+                $updating_media = $pdo->prepare("UPDATE media SET title=?, rating=?, description=?, awards=?, seasons=?, country=?, language=? WHERE id=?");
+                $updating_media->execute(
                     [$_POST['title'], 
                     $_POST['rating'], 
                     $_POST['description'], 
@@ -119,8 +124,8 @@ function overlord()
             $line_six = '<h2>Language</h2><input type="text" name="language" placeholder="Hier de gesproken taal">';
             if(isset($_POST['title'])) {
                 $awards = boolval($_POST['has_won_awards']);
-                $updating_series = $pdo->prepare("INSERT INTO media (title, rating, description, awards, seasons, country, language) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                $updating_series->execute(
+                $updating_media = $pdo->prepare("INSERT INTO media (title, rating, description, awards, seasons, country, language, media_type) VALUES (?, ?, ?, ?, ?, ?, ?, 'serie')");
+                $updating_media->execute(
                     [$_POST['title'], 
                     $_POST['rating'], 
                     $_POST['description'], 
@@ -144,8 +149,8 @@ function overlord()
             $line_five = '<h2>Language</h2><input type="text" name="language" value="' . $to_show['language'] . '">';
             $line_six = '<h2>Youtube Identifier</h2><input type="text" name="ID_YT" value="' . $to_show['ID_YT'] . '">';
             if(isset($_POST['title'])) {
-                $updating_series = $pdo->prepare("UPDATE media SET title=?, duration=?, description=?, date_release=?, country=?, language=?, ID_YT=? WHERE id=?");
-                $updating_series->execute(
+                $updating_media = $pdo->prepare("UPDATE media SET title=?, duration=?, description=?, date_release=?, country=?, language=?, ID_YT=? WHERE id=?");
+                $updating_media->execute(
                     [$_POST['title'], 
                     $_POST['duration'], 
                     $_POST['description'], 
@@ -167,8 +172,8 @@ function overlord()
             $line_five = '<h2>Language</h2><input type="text" name="language" placeholder="Hier de gesproken taal">';
             $line_six = '<h2>Youtube Identifier</h2><input type="text" name="ID_YT" placeholder="Hier de youtube trailer id">';
             if(isset($_POST['title'])) {
-                $updating_series = $pdo->prepare("INSERT INTO media (title, duration, description, date_release, country, language, ID_YT) VALUES (?, ?, ?, ?, ?, ?)");
-                $updating_series->execute(
+                $updating_media = $pdo->prepare("INSERT INTO media (title, duration, description, date_release, country, language, ID_YT, media_type) VALUES (?, ?, ?, ?, ?, ?, ?, 'movie')");
+                $updating_media->execute(
                     [$_POST['title'], 
                     $_POST['duration'], 
                     $_POST['description'], 
@@ -183,29 +188,18 @@ function overlord()
         <!DOCTYPE html>
         <html>
         <head>
-        <style>
-        .sort {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            width: 30%;
-            align-self: center;
-        }
-        input:not([name=submit]) {
-            text-align: center;
-            width: 300px;
-        }
-        textarea[name=description] {
-            resize: none;
-        }
-        </style>
+            <link rel="stylesheet" type="text/css" href="CSS/theme.css">
         </head>
         <body>
             <main>
-                <h1>Welkom op het netland beheerderspaneel</h1>
+                <div id="saveButton">
+                    <h1>Welkom op het netland beheerderspaneel</h1>
+                    <form action="/PHP/logout.php" method="post">
+                        <input type="submit" name="submit" value="logout">
+                    </form>
+                </div>
                 <h2><?php echo $change_that_header;?></h2>
-                <form method="post">
+                <form id="sortfather" method="post">
                     <div class='sort'>
                         <?php echo $line_one;?>
                     </div>
@@ -245,7 +239,7 @@ if ($result == 0 || $result == 2 || $result == 3) {
 }
 if ($result == 1) {
     echo '<h1>U bent niet ingelogd, u wordt nu doorgestuurd naar de login pagina.</h1>';
-    echo "<script>setTimeout(\"location.href = '/PHP/login.php';\",1500);</script>";
+    echo "<script>setTimeout(\"location.href = '/PHP/logout.php';\",1500);</script>";
 }
 
 ?>

@@ -1,7 +1,6 @@
 <?php
 function loggingIn() 
 {
-    setcookie('loggedInUser', "", time() - 300);
     $dsn = "mysql:host=localhost;dbname=netland";
     $user = "root";
     $passwd = "";
@@ -25,7 +24,7 @@ function loggingIn()
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login pagina</title>
+    <link rel="stylesheet" type="text/css" href="CSS/theme.css">
 </head>
 <body>
     <header>
