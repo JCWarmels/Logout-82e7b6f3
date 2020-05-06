@@ -37,7 +37,7 @@ function overlord()
             $showable_fourth = '';
             $showable_fifth = '<iframe width="420" height="315" src="https://www.youtube.com/embed/' . $to_show['ID_YT'] . '"></iframe>';
             $link_shift = 'overlord.php?id=' . $_GET['id'] . '&torun=6';
-        } 
+        }  
         else {
             $showable_first = $to_show['rating'] . '/5.0';
             $showable_second = $to_show['awards'] . PHP_EOL . 'awards won';
@@ -209,10 +209,12 @@ function overlord()
                     <div class='sort'>
                         <h2>Description</h2>
                         <textarea rows="15" cols="40"type="text" name="description"
-                            <?php if ($_GET['torun'] == '2' || $_GET['torun'] == '5') { echo $display_description;
+                            <?php if ($_GET['torun'] == '2' || $_GET['torun'] == '5') { 
+                                echo $display_description;
                             }?>
-                            ><?php if ($_GET['torun'] == '3' || $_GET['torun'] == '6') { echo $display_description;
-                            }?></textarea>
+                            ><?php if ($_GET['torun'] == '3' || $_GET['torun'] == '6') { 
+                                echo $display_description;
+}?></textarea>
                     </div>
                     <div class='sort'>
                         <?php echo $line_three;?>
