@@ -30,14 +30,14 @@ function overlord()
         $request = $pdo->prepare("SELECT * FROM media WHERE id=?");
         $request->execute([$_GET['id']]);
         $to_show = $request->fetch(PDO::FETCH_ASSOC);
-        if($_GET['torun'] == '4') {
+        if ($_GET['torun'] == '4') {
             $showable_first = $to_show['duration'] . 'min';
             $showable_second = $to_show['date_release'];
             $showable_third = $to_show['country'];
             $showable_fourth = '';
             $showable_fifth = '<iframe width="420" height="315" src="https://www.youtube.com/embed/' . $to_show['ID_YT'] . '"></iframe>';
             $link_shift = 'overlord.php?id=' . $_GET['id'] . '&torun=6';
-        }
+        } 
         else {
             $showable_first = $to_show['rating'] . '/5.0';
             $showable_second = $to_show['awards'] . PHP_EOL . 'awards won';
@@ -70,7 +70,7 @@ function overlord()
                     <h4><?php echo $showable_third?></h4>
                 </div>
                 <div style="display:flex; flex-direction:row; width:150px; justify-content: space-around;">
-                    <h4><?php echo $to_show['language'].PHP_EOL?></h4>
+                    <h4><?php echo $to_show['language'] . PHP_EOL?></h4>
                     <h4><?php echo $showable_fourth?></h4>
                 </div>
                 <div style="display:flex; flex-direction:row; width:800px;">
@@ -84,7 +84,7 @@ function overlord()
         </body>
         </html>
         <?php
-    }
+    } 
     else {
         if ($_GET['torun'] == '3') {
             $series_request = $pdo->prepare("SELECT * FROM media WHERE id=?");
@@ -98,7 +98,7 @@ function overlord()
             $line_four = '<h2>Seasons</h2><input type="number" name="seasons" value="' . $to_show['seasons'] . '">';
             $line_five = '<h2>Country of Origin</h2><input type="text" name="country" value="' . $to_show['country'] . '">';
             $line_six = '<h2>Language</h2><input type="text" name="language" value="' . $to_show['language'] . '">';
-            if(isset($_POST['title'])) {
+            if (isset($_POST['title'])) {
                 $awards = boolval($_POST['has_won_awards']);
                 $updating_media = $pdo->prepare("UPDATE media SET title=?, rating=?, description=?, awards=?, seasons=?, country=?, language=? WHERE id=?");
                 $updating_media->execute(
@@ -122,7 +122,7 @@ function overlord()
             $line_four = '<h2>Seasons</h2><input type="number" name="seasons" placeholder="Hier de hoeveelheid seizoenen">';
             $line_five = '<h2>Country of Origin</h2><input type="text" name="country" placeholder="Hier het land van herkomst">';
             $line_six = '<h2>Language</h2><input type="text" name="language" placeholder="Hier de gesproken taal">';
-            if(isset($_POST['title'])) {
+            if (isset($_POST['title'])) {
                 $awards = boolval($_POST['has_won_awards']);
                 $updating_media = $pdo->prepare("INSERT INTO media (title, rating, description, awards, seasons, country, language, media_type) VALUES (?, ?, ?, ?, ?, ?, ?, 'serie')");
                 $updating_media->execute(
@@ -148,7 +148,7 @@ function overlord()
             $line_four = '<h2>Country of Origin</h2><input type="text" name="country" value="' . $to_show['country'] . '">';
             $line_five = '<h2>Language</h2><input type="text" name="language" value="' . $to_show['language'] . '">';
             $line_six = '<h2>Youtube Identifier</h2><input type="text" name="ID_YT" value="' . $to_show['ID_YT'] . '">';
-            if(isset($_POST['title'])) {
+            if (isset($_POST['title'])) {
                 $updating_media = $pdo->prepare("UPDATE media SET title=?, duration=?, description=?, date_release=?, country=?, language=?, ID_YT=? WHERE id=?");
                 $updating_media->execute(
                     [$_POST['title'], 
@@ -171,7 +171,7 @@ function overlord()
             $line_four = '<h2>Country of Origin</h2><input type="text" name="country" placeholder="Hier het land van herkomst">';
             $line_five = '<h2>Language</h2><input type="text" name="language" placeholder="Hier de gesproken taal">';
             $line_six = '<h2>Youtube Identifier</h2><input type="text" name="ID_YT" placeholder="Hier de youtube trailer id">';
-            if(isset($_POST['title'])) {
+            if (isset($_POST['title'])) {
                 $updating_media = $pdo->prepare("INSERT INTO media (title, duration, description, date_release, country, language, ID_YT, media_type) VALUES (?, ?, ?, ?, ?, ?, ?, 'movie')");
                 $updating_media->execute(
                     [$_POST['title'], 
@@ -209,8 +209,10 @@ function overlord()
                     <div class='sort'>
                         <h2>Description</h2>
                         <textarea rows="15" cols="40"type="text" name="description"
-                            <?php if ($_GET['torun'] == '2' || $_GET['torun'] == '5') { echo $display_description;}?>
-                            ><?php if ($_GET['torun'] == '3' || $_GET['torun'] == '6') { echo $display_description;}?></textarea>
+                            <?php if ($_GET['torun'] == '2' || $_GET['torun'] == '5') { echo $display_description;
+                            }?>
+                            ><?php if ($_GET['torun'] == '3' || $_GET['torun'] == '6') { echo $display_description;
+                            }?></textarea>
                     </div>
                     <div class='sort'>
                         <?php echo $line_three;?>
